@@ -1,0 +1,7 @@
+{
+  "tier": "sandbox",
+  "region": "ap-southeast-2",
+  "project": "default",
+  "application": "app-1",
+  "autoSync": true
+}

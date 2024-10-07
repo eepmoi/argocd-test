@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx
+  name: tigger-app-1
+  namespace: tigger-applications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - image: public.ecr.aws/nginx/nginx:latest
+          name: aysomgcp
+          ports:
+            - containerPort: 1800

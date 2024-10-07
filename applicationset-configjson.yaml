@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: tigger-applications
+  namespace: argocd
+spec:
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  ignoreApplicationDifferences:
+    - jsonPointers:
+        - /spec/syncPolicy
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://github.com/eepmoi/argocd-test
+        revision: application-sets
+        files:
+          - path: "application-sets/tenants-configjson/**/config.json"
+  template:
+    metadata:
+      name: "tenant-tigger-{{.application}}"
+    spec:
+      project: "{{.project}}" #todo parametrise
+      source:
+        repoURL: https://github.com/eepmoi/argocd-test
+        targetRevision: application-sets
+        path: "{{.path.path}}" # todo how to separate clusters
+        directory:
+          exclude: "*.json"
+      syncPolicy: # cannot template this (argcocd limitation): https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/GoTemplate/#limitations
+        automated:
+          prune: true
+          selfHeal: true
+      destination:
+        server: "https://kubernetes.default.svc"
+        # namespace: "tigger-applications" #todo parametrise
+        namespace: argocd
