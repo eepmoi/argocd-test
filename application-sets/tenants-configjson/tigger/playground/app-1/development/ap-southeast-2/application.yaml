@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: nginx
-  name: tigger-app-2
+  name: tigger-app-2-new-name
   namespace: tigger-applications
 spec:
   replicas: 1
